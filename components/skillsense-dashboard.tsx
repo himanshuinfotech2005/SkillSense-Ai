@@ -4,9 +4,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import {
-  Activity, AlertTriangle, ArrowUpRight, BarChart3, Bell,
+  Activity, AlertTriangle, ArrowUpRight, BarChart3, Bell, BookOpen,
   BriefcaseBusiness, ChevronDown, ChevronLeft, ChevronRight, CircleHelp,
-  Download, Filter, Gauge, Menu, Network, Search, ShieldCheck, Target, TrendingUp, Users, X, Zap,
+  Download, FileCheck2, Filter, Gauge, GraduationCap, LayoutDashboard,
+  Menu, Network, Search, Settings2, ShieldCheck, SlidersHorizontal,
+  Sparkles, Target, TrendingUp, Users, X, Zap,
 } from 'lucide-react'
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart,
@@ -15,11 +17,21 @@ import {
 import { demandData, occupations } from '@/data/skillsense'
 import { KpiCard, Panel, SelectControl } from '@/components/dashboard-primitives'
 import { useAnalysis } from '@/components/analysis-provider'
-import { navigationGroups, routeLabels } from '@/components/navigation-config'
 
 const navy = '#0B3C5D'
 const blue = '#328CC1'
 const green = '#1D7A46'
+
+const navGroups = [
+  { label: 'WORKSPACE', items: [
+    ['Dashboard', LayoutDashboard, '/dashboard'], ['Explore Labour Market', Search, '/explore'], ['Demand Forecasting', TrendingUp, '/forecasting'],
+    ['Training Capacity', GraduationCap, '/training-capacity'], ['Skill Gap Analysis', Target, '/gap-analysis'], ['Recommendations', Sparkles, '/recommendations'], ['What-If Simulator', SlidersHorizontal, '/scenario-simulator'],
+  ]},
+  { label: 'INTELLIGENCE', items: [['Evidence Centre', FileCheck2, '/evidence-centre'], ['Reports & Exports', Download, '/reports']] },
+  { label: 'MANAGEMENT', items: [['Administration', Settings2, '/admin'], ['Research & Methodology', BookOpen, '/researcher']] },
+] as const
+
+const routeLabels: Record<string, string> = Object.fromEntries(navGroups.flatMap(group => group.items.map(([label, , path]) => [path, label])))
 
 export default function SkillsenseDashboard() {
   const pathname = usePathname()
@@ -36,7 +48,7 @@ export default function SkillsenseDashboard() {
     {mobileOpen && <button aria-label="Close navigation" onClick={() => setMobileOpen(false)} className="fixed inset-0 z-30 bg-[#0B3C5D]/25 lg:hidden" />}
     <aside aria-label="Primary navigation" className={`fixed inset-y-0 left-0 z-40 flex flex-col border-r border-[#174F70] bg-[#0B3C5D] text-white shadow-[8px_0_24px_rgba(11,60,93,0.08)] transition-all duration-300 ${collapsed ? 'w-[76px]' : 'w-[256px]'} ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
       <div className="flex h-[72px] items-center gap-3 border-b border-white/10 px-5"><div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10"><Network className="size-5 text-[#73c4ef]" /></div>{!collapsed && <div><p className="text-[16px] font-bold tracking-tight">SkillSense <span className="text-[#73c4ef]">AI</span></p><p className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.16em] text-white/50">SIH 2026 · PS 26246</p></div>}<button onClick={() => setMobileOpen(false)} className="ml-auto lg:hidden"><X className="size-5" /></button></div>
-      <nav className="flex-1 overflow-y-auto px-3 py-5">{navigationGroups.map(group => <div key={group.label} className="mb-6"><p className={`mb-2 px-3 text-[9px] font-bold tracking-[0.16em] text-white/35 ${collapsed ? 'text-center' : ''}`}>{collapsed ? '···' : group.label}</p><div className="flex flex-col gap-1">{group.items.map(([label, Icon, path]) => <Link key={path} href={path} onClick={() => setMobileOpen(false)} title={label} className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[12px] font-medium transition ${active === label ? 'bg-white/14 text-white shadow-sm' : 'text-white/65 hover:bg-white/8 hover:text-white'} ${collapsed ? 'justify-center' : ''}`}><Icon className="size-[17px] shrink-0" />{!collapsed && <span>{label}</span>}{!collapsed && active === label && <span className="ml-auto size-1.5 rounded-full bg-[#73c4ef]" />}</Link>)}</div></div>)}</nav>
+      <nav className="flex-1 overflow-y-auto px-3 py-5">{navGroups.map(group => <div key={group.label} className="mb-6"><p className={`mb-2 px-3 text-[9px] font-bold tracking-[0.16em] text-white/35 ${collapsed ? 'text-center' : ''}`}>{collapsed ? '···' : group.label}</p><div className="flex flex-col gap-1">{group.items.map(([label, Icon, path]) => <Link key={path} href={path} onClick={() => setMobileOpen(false)} title={label} className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[12px] font-medium transition ${active === label ? 'bg-white/14 text-white shadow-sm' : 'text-white/65 hover:bg-white/8 hover:text-white'} ${collapsed ? 'justify-center' : ''}`}><Icon className="size-[17px] shrink-0" />{!collapsed && <span>{label}</span>}{!collapsed && active === label && <span className="ml-auto size-1.5 rounded-full bg-[#73c4ef]" />}</Link>)}</div></div>)}</nav>
       <div className="border-t border-white/10 p-3"><div className={`flex items-center gap-3 rounded-lg bg-white/8 p-2.5 ${collapsed ? 'justify-center' : ''}`}><div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#328CC1] text-xs font-bold">AK</div>{!collapsed && <div className="min-w-0"><p className="truncate text-[11px] font-semibold">Ananya Kapoor</p><p className="text-[10px] text-white/50">{role} · Demo account</p></div>}</div></div>
     </aside>
     <div className={`transition-all duration-300 ${collapsed ? 'lg:pl-[76px]' : 'lg:pl-[256px]'}`}>
