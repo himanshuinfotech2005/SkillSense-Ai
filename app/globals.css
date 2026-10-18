@@ -47,40 +47,38 @@
 
 :root {
   color-scheme: light;
-  --background: #f9f9f9;
-  --foreground: #1d2731;
-  --background: #f9f9f9;
-  --foreground: #1d2731;
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #0b3c5d;
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: #64748b;
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: #e2e8f0;
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #F9F9F9;
+  --foreground: #1D2731;
+  --card: #FFFFFF;
+  --card-foreground: #1D2731;
+  --popover: #FFFFFF;
+  --popover-foreground: #1D2731;
+  --primary: #0B3C5D;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EAF3F8;
+  --secondary-foreground: #0B3C5D;
+  --muted: #F1F4F6;
+  --muted-foreground: #60707B;
+  --accent: #EAF3F8;
+  --accent-foreground: #0B3C5D;
+  --destructive: #1D2731;
+  --border: #D9E2E8;
+  --input: #D9E2E8;
+  --ring: #328CC1;
+  --chart-1: #0B3C5D;
+  --chart-2: #328CC1;
+  --chart-3: #1D7A46;
+  --chart-4: #7AA8BD;
+  --chart-5: #1D2731;
+  --radius: 0.8rem;
+  --sidebar: #0B3C5D;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #328CC1;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #174F70;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #174F70;
+  --sidebar-ring: #328CC1;
 }
 
 .dark {
@@ -161,6 +159,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: -0.01em;
   }
 }
