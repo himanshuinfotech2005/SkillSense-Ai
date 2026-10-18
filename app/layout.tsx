@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { AnalysisProvider } from '@/components/analysis-provider'
 
 export const metadata: Metadata = {
   title: 'SkillSense AI | Workforce Planning Intelligence',
@@ -38,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body className="antialiased">
-        {children}
+        <AnalysisProvider>{children}</AnalysisProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
