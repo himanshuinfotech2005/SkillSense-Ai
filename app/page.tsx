@@ -1,5 +1,6 @@
 import SkillsenseDashboard from '@/components/skillsense-dashboard'
+import { AnalysisProvider } from '@/components/analysis-provider'
 
 export default function Home() {
-  return <SkillsenseDashboard />
+  return <AnalysisProvider><SkillsenseDashboard /></AnalysisProvider>
 }
