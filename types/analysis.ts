@@ -7,6 +7,11 @@ export type AnalysisState = {
   source: string
   trainingAssumption: number
   scenario: number
+  trainingPeriod: string
+  geographyAlignment: string
+  occupationMapping: string
+  measurementUnits: string
+  forecastMethod: string
 }
 
 export type ComparabilityGates = {

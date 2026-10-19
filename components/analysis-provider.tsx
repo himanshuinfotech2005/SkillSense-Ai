@@ -7,7 +7,7 @@ import type { AnalysisMetrics, AnalysisState } from '@/types/analysis'
 type AnalysisContextValue = {
   analysis: AnalysisState
   metrics: AnalysisMetrics
-  updateAnalysis: (key: keyof AnalysisState, value: string | number) => void
+  updateAnalysis: <K extends keyof AnalysisState>(key: K, value: AnalysisState[K]) => void
   resetAnalysis: () => void
 }
 

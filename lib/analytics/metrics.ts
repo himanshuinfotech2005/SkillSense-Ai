@@ -10,7 +10,14 @@ export function calculateMetrics(state: AnalysisState, gates: ComparabilityGates
   const demand = Math.round(73 * factor * periodFactor * state.scenario)
   const forecast = Math.round(demand + ({ '3 months': 4, '6 months': 10, '12 months': 17 }[state.horizon] ?? 10) * state.scenario)
   const seats = Math.max(1, Math.round(64 * state.trainingAssumption))
-  const comparable = Object.values(gates).every(Boolean)
+  const derivedGates = {
+    ...gates,
+    geography: state.geographyAlignment === 'Aligned' && gates.geography,
+    period: state.period === state.trainingPeriod && gates.period,
+    occupation: state.occupationMapping === 'Mapped' && gates.occupation,
+    units: state.measurementUnits === 'Index vs seats' && gates.units,
+  }
+  const comparable = Object.values(derivedGates).every(Boolean)
   const gapScore = comparable ? Math.max(0, Math.round(((demand - seats) / demand) * 100)) : null
   const evidenceQuality = Math.max(35, Math.min(98, Math.round(76 * factor * (state.source === 'All sources' ? 1 : 1.08))))
   return { demand, forecast, gapCases: comparable ? Math.max(0, Math.round((demand - seats) / 3)) : 0, validatedCases: comparable ? Math.max(0, Math.round((demand - seats) / 5)) : 0, evidenceQuality, sourceFreshness: state.source === 'All sources' ? 68 : 86, mapping: state.occupation === 'All occupations' ? 84 : 96, geographicCoverage: state.region === 'National view' ? 92 : 52, mismatch: comparable ? (gapScore && gapScore > 20 ? 'Review' : 'Aligned') : 'Not Comparable', gapScore, demandTrend: forecast > demand + 5 ? 'Rising' : forecast < demand - 5 ? 'Falling' : 'Stable' }
