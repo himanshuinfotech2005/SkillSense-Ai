@@ -8,7 +8,17 @@ import { horizonOptions, occupationOptions, periodOptions, regionOptions, scenar
 
 function Controls({ compact = false, onReset }: { compact?: boolean; onReset: () => void }) {
   const { analysis, updateAnalysis } = useAnalysis()
-  const occupations = useMemo(() => ['All occupations', ...occupationOptions.filter((occupation) => occupation === 'All occupations' || analysis.sector === 'All sectors' || occupationOptions.includes(occupation as never))], [analysis.sector])
+  const occupations = useMemo(() => {
+    if (analysis.sector === 'All sectors') return [...occupationOptions]
+
+    const sectorOccupations = new Set(
+      occupationOptions.filter((occupation) => occupation === 'All occupations'),
+    )
+    return [
+      ...sectorOccupations,
+      ...occupationOptions.filter((occupation) => occupation !== 'All occupations'),
+    ]
+  }, [analysis.sector])
   const updateSector = (value: string) => {
     updateAnalysis('sector', value)
     if (analysis.occupation !== 'All occupations') updateAnalysis('occupation', 'All occupations')
