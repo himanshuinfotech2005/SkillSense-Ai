@@ -7,11 +7,13 @@ const occupationFactor: Record<string, number> = { 'All occupations': 1, 'Solar 
 export function calculateMetrics(state: AnalysisState, gates: ComparabilityGates): AnalysisMetrics {
   const factor = (regionFactor[state.region] ?? 1) * (sectorFactor[state.sector] ?? 1) * (occupationFactor[state.occupation] ?? 1)
   const periodFactor = state.period === 'Jan–Dec 2024' ? 0.96 : state.period === 'Jul–Dec 2024' ? 0.91 : 1
-  const demand = Math.round(73 * factor * periodFactor * state.scenario)
+  const scenario = Number.isFinite(state.scenario) ? state.scenario : 1
+  const trainingAssumption = Number.isFinite(state.trainingAssumption) ? state.trainingAssumption : 0.8
+  const demand = Math.round(73 * factor * periodFactor * scenario)
   const horizonMonths: Record<string, number> = { '1 month': 1, '2 months': 2, '3 months': 3, '6 months': 6, '9 months': 9, '12 months': 12, '18 months': 18, '24 months': 24 }
   const months = horizonMonths[state.horizon] ?? 6
-  const forecast = Math.round(demand + Math.round((4 + months * 1.45)) * state.scenario)
-  const seats = Math.max(1, Math.round(64 * state.trainingAssumption))
+  const forecast = Math.round(demand + Math.round((4 + months * 1.45)) * scenario)
+  const seats = Math.max(1, Math.round(64 * trainingAssumption))
   const derivedGates = {
     ...gates,
     geography: state.geographyAlignment === 'Aligned' && gates.geography,

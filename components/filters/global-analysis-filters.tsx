@@ -30,8 +30,8 @@ function Controls({ compact = false, onReset }: { compact?: boolean; onReset: ()
     <SelectControl label="Reporting period" value={analysis.period} onChange={(value) => updateAnalysis('period', value)} options={[...periodOptions]} />
     <SelectControl label="Forecast horizon" value={analysis.horizon} onChange={(value) => updateAnalysis('horizon', value)} options={[...horizonOptions]} />
     <SelectControl label="Data sources" value={analysis.source} onChange={(value) => updateAnalysis('source', value)} options={[...sourceOptions]} />
-    <SelectControl label="Training capacity" value={`${Math.round(analysis.trainingAssumption * 100)}%`} onChange={(value) => updateAnalysis('trainingAssumption', Number(value) / 100)} options={trainingOptions.map((value) => `${value}%`)} />
-    <SelectControl label="Demand scenario" value={`${Math.round(analysis.scenario * 100)}%`} onChange={(value) => updateAnalysis('scenario', Number(value) / 100)} options={scenarioOptions.map((value) => `${value}%`)} />
+    <SelectControl label="Training capacity" value={`${Math.round((Number.isFinite(analysis.trainingAssumption) ? analysis.trainingAssumption : 0.8) * 100)}%`} onChange={(value) => { const parsed = Number.parseInt(value.replace('%', ''), 10); updateAnalysis('trainingAssumption', Number.isFinite(parsed) ? parsed / 100 : 0.8) }} options={trainingOptions.map((value) => `${value}%`)} />
+    <SelectControl label="Demand scenario" value={`${Math.round(analysis.scenario * 100)}%`} onChange={(value) => { const parsed = Number.parseInt(value.replace('%', ''), 10); updateAnalysis('scenario', Number.isFinite(parsed) ? parsed / 100 : 1) }} options={scenarioOptions.map((value) => `${value}%`)} />
     <button onClick={onReset} className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 text-[11px] font-semibold text-[#0B3C5D] transition hover:border-[#328CC1] hover:bg-[#F5FAFD] xl:col-span-8"><RotateCcw className="size-3.5" />Reset filters</button>
   </div>
 }

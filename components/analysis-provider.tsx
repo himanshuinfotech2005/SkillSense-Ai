@@ -18,7 +18,13 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     if (typeof window === 'undefined') return defaultAnalysisState
     try {
       const stored = window.localStorage.getItem('skillsense-analysis-state')
-      return stored ? { ...defaultAnalysisState, ...JSON.parse(stored) } : defaultAnalysisState
+      const parsed = stored ? JSON.parse(stored) : null
+      const next = parsed && typeof parsed === 'object' ? { ...defaultAnalysisState, ...parsed } : defaultAnalysisState
+      return {
+        ...next,
+        trainingAssumption: Number.isFinite(next.trainingAssumption) ? next.trainingAssumption : defaultAnalysisState.trainingAssumption,
+        scenario: Number.isFinite(next.scenario) ? next.scenario : defaultAnalysisState.scenario,
+      }
     } catch {
       return defaultAnalysisState
     }
