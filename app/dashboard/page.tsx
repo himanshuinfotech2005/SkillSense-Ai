@@ -1,2 +1,2 @@
 import SkillsenseRoutePage from '@/components/skillsense-route-page'
-export default SkillsenseRoutePage
+export default function DashboardPage() { return <SkillsenseRoutePage page="dashboard" /> }

@@ -1,2 +1,2 @@
 import SkillsenseRoutePage from '@/components/skillsense-route-page'
-export default SkillsenseRoutePage
+export default function GapAnalysisPage() { return <SkillsenseRoutePage page="gap-analysis" /> }

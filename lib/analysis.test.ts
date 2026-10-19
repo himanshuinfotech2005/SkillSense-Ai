@@ -1,4 +1,4 @@
-import { calculateMetrics, defaultAnalysisState, defaultGates, type AnalysisState } from './analysis'
+import { calculateMetrics, defaultAnalysisState, defaultGates, type AnalysisState } from './analysis.ts'
 
 const assert = (condition: boolean, message: string) => { if (!condition) throw new Error(message) }
 const state = (overrides: Partial<AnalysisState> = {}): AnalysisState => ({ ...defaultAnalysisState, ...overrides })

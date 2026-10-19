@@ -1,25 +1,45 @@
 'use client'
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { calculateMetrics, defaultAnalysisState, defaultGates } from '@/lib/analysis'
 import type { AnalysisMetrics, AnalysisState } from '@/types/analysis'
 
 type AnalysisContextValue = {
   analysis: AnalysisState
   metrics: AnalysisMetrics
-  updateAnalysis: (key: keyof AnalysisState, value: string | number) => void
+  updateAnalysis: <K extends keyof AnalysisState>(key: K, value: AnalysisState[K]) => void
   resetAnalysis: () => void
 }
 
 const AnalysisContext = createContext<AnalysisContextValue | null>(null)
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
-  const [analysis, setAnalysis] = useState<AnalysisState>(defaultAnalysisState)
+  const [analysis, setAnalysis] = useState<AnalysisState>(() => {
+    if (typeof window === 'undefined') return defaultAnalysisState
+    try {
+      const stored = window.localStorage.getItem('skillsense-analysis-state')
+      const parsed = stored ? JSON.parse(stored) : null
+      const next = parsed && typeof parsed === 'object' ? { ...defaultAnalysisState, ...parsed } : defaultAnalysisState
+      return {
+        ...next,
+        trainingAssumption: Number.isFinite(next.trainingAssumption) ? next.trainingAssumption : defaultAnalysisState.trainingAssumption,
+        scenario: Number.isFinite(next.scenario) ? next.scenario : defaultAnalysisState.scenario,
+      }
+    } catch {
+      return defaultAnalysisState
+    }
+  })
+  useEffect(() => {
+    window.localStorage.setItem('skillsense-analysis-state', JSON.stringify(analysis))
+  }, [analysis])
   const value = useMemo(() => ({
     analysis,
     metrics: calculateMetrics(analysis, defaultGates),
     updateAnalysis: (key: keyof AnalysisState, value: string | number) => setAnalysis(current => ({ ...current, [key]: value })),
-    resetAnalysis: () => setAnalysis(defaultAnalysisState),
+    resetAnalysis: () => {
+      setAnalysis(defaultAnalysisState)
+      window.localStorage.removeItem('skillsense-analysis-state')
+    },
   }), [analysis])
   return <AnalysisContext.Provider value={value}>{children}</AnalysisContext.Provider>
 }
