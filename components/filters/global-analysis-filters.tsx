@@ -64,7 +64,16 @@ export function GlobalAnalysisFilters() {
   }, [])
 
   return <div className="sticky top-[72px] z-30 mb-7">
-    <div className={`hidden rounded-2xl border border-[#D9E2E8] bg-white shadow-[0_4px_18px_rgba(11,60,93,0.08)] transition-[padding] duration-200 lg:block ${scrolled ? 'p-3' : 'p-5'}`}><div className={`flex items-center justify-between ${scrolled ? 'mb-2' : 'mb-4'}`}><div><p className="text-xs font-bold text-[#0B3C5D]">Global analysis context</p>{!scrolled && <p className="mt-1 text-[10px] text-slate-500">Shared across every workspace view</p>}</div><span className="rounded-full bg-[#EAF5EE] px-2.5 py-1 text-[10px] font-bold text-[#1D7A46]">LIVE</span></div><Controls onReset={resetAnalysis} /></div>
+    <div className={`hidden min-h-[156px] rounded-2xl border border-[#D9E2E8] shadow-[0_4px_18px_rgba(11,60,93,0.08)] transition-[background-color,box-shadow,padding] duration-250 ease-out lg:block ${scrolled ? 'bg-[rgba(255,255,255,0.94)] p-3 shadow-[0_8px_24px_rgba(11,60,93,0.14)] backdrop-blur-[14px] [-webkit-backdrop-filter:blur(14px)]' : 'bg-white p-5'}`}>
+      <div className={`flex h-8 items-start justify-between transition-[margin] duration-250 ease-out ${scrolled ? 'mb-2' : 'mb-4'}`}>
+        <div className={`transition-opacity duration-200 ${scrolled ? 'opacity-0' : 'opacity-100'}`} aria-hidden={scrolled}>
+          <p className="text-xs font-bold text-[#0B3C5D]">Global analysis context</p>
+          <p className="mt-1 text-[10px] text-slate-500">Shared across every workspace view</p>
+        </div>
+        <span className="rounded-full bg-[#EAF5EE] px-2.5 py-1 text-[10px] font-bold text-[#1D7A46]">LIVE</span>
+      </div>
+      <Controls onReset={resetAnalysis} />
+    </div>
     <div className="rounded-xl border border-[#B9D5E3] bg-white p-3 shadow-[0_6px_20px_rgba(11,60,93,0.12)] lg:hidden"><div className="flex items-center justify-between gap-3"><div className="min-w-0"><p className="flex items-center gap-2 text-[11px] font-bold text-[#0B3C5D]"><Filter className="size-3.5" />{analysis.region}</p><p className="truncate text-[10px] text-slate-500">{analysis.occupation} · {analysis.period}</p></div><button onClick={() => setOpen(true)} className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#0B3C5D] px-3 py-2 text-[11px] font-semibold text-white"><Filter className="size-3.5" />Filters</button></div></div>
     {open && <div className="fixed inset-0 z-50 bg-[#0B3C5D]/30 lg:hidden"><section role="dialog" aria-label="Global analysis filters" className="absolute inset-x-0 bottom-0 max-h-[88vh] overflow-y-auto rounded-t-3xl bg-white p-5 shadow-2xl"><div className="mb-5 flex items-center justify-between"><div><h2 className="text-base font-bold text-[#0B3C5D]">Global filters</h2><p className="text-xs text-slate-500">Changes update all pages</p></div><button aria-label="Close filters" onClick={() => setOpen(false)} className="rounded-lg p-2 hover:bg-slate-100"><X className="size-5" /></button></div><Controls compact onReset={() => { resetAnalysis(); setOpen(false) }} /><button onClick={() => setOpen(false)} className="mt-4 w-full rounded-lg bg-[#0B3C5D] py-3 text-xs font-semibold text-white">Apply filters</button></section></div>}
   </div>
