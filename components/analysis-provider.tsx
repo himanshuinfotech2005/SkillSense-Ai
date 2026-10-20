@@ -14,24 +14,31 @@ type AnalysisContextValue = {
 const AnalysisContext = createContext<AnalysisContextValue | null>(null)
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
-  const [analysis, setAnalysis] = useState<AnalysisState>(() => {
-    if (typeof window === 'undefined') return defaultAnalysisState
+  const [analysis, setAnalysis] = useState<AnalysisState>(defaultAnalysisState)
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
     try {
       const stored = window.localStorage.getItem('skillsense-analysis-state')
       const parsed = stored ? JSON.parse(stored) : null
-      const next = parsed && typeof parsed === 'object' ? { ...defaultAnalysisState, ...parsed } : defaultAnalysisState
-      return {
-        ...next,
-        trainingAssumption: Number.isFinite(next.trainingAssumption) ? next.trainingAssumption : defaultAnalysisState.trainingAssumption,
-        scenario: Number.isFinite(next.scenario) ? next.scenario : defaultAnalysisState.scenario,
+      if (parsed && typeof parsed === 'object') {
+        const next = { ...defaultAnalysisState, ...parsed }
+        setAnalysis({
+          ...next,
+          trainingAssumption: Number.isFinite(next.trainingAssumption) ? next.trainingAssumption : defaultAnalysisState.trainingAssumption,
+          scenario: Number.isFinite(next.scenario) ? next.scenario : defaultAnalysisState.scenario,
+        })
       }
     } catch {
-      return defaultAnalysisState
+      // Ignore malformed client-side preferences and use the defaults.
+    } finally {
+      setHydrated(true)
     }
-  })
+  }, [])
+
   useEffect(() => {
-    window.localStorage.setItem('skillsense-analysis-state', JSON.stringify(analysis))
-  }, [analysis])
+    if (hydrated) window.localStorage.setItem('skillsense-analysis-state', JSON.stringify(analysis))
+  }, [analysis, hydrated])
   const value = useMemo(() => ({
     analysis,
     metrics: calculateMetrics(analysis, defaultGates),
